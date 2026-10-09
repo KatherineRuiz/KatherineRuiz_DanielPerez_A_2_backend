@@ -70,9 +70,9 @@ public class ReservasService {
         if (dto.getCantidadPasajeros() > vehiculo.get().getCapacidad()) {
             throw new RuntimeException("La cantidad de pasajeros es mayor a la capacidad del vehículo");
         }
-//        if (repo.existByFechaReservaAndVehiculo_Id(dto.getFechaReserva(), dto.getIdVehiculo()) == true){
-//            throw new RuntimeException("Ya existe una reserva para este vehículo en esta fecha.");
-//        }
+        if (repo.existsByFechaReservaAndVehiculo_Id(dto.getFechaReserva(), dto.getIdVehiculo())){
+            throw new RuntimeException("Ya existe una reserva para este vehículo en esta fecha.");
+        }
         ReservasEntity entity = convertirAEntity(dto);
         entity.setEstado("CONFIRMADA");
         entity.setTotalPago(entity.getCantidadDias() * vehiculo.get().getPrecioDia());
@@ -113,9 +113,9 @@ public class ReservasService {
         if (dto.getCantidadPasajeros() > vehiculo.get().getCapacidad()) {
             throw new RuntimeException("La cantidad de pasajeros es mayor a la capacidad del vehículo");
         }
-//        if (repo.existByFechaReservaAndVehiculo_Id(dto.getFechaReserva(), dto.getIdVehiculo()) == true){
-//            throw new RuntimeException("Ya existe una reserva para este vehículo en esta fecha.");
-//        }
+        if (repo.existsByFechaReservaAndVehiculo_Id(dto.getFechaReserva(), dto.getIdVehiculo())){
+            throw new RuntimeException("Ya existe una reserva para este vehículo en esta fecha.");
+        }
         Optional<ReservasEntity> registroExistente = repo.findById(id);
         if (registroExistente.isPresent()){
             ReservasEntity entity = registroExistente.get();

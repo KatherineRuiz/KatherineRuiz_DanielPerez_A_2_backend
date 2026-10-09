@@ -7,5 +7,5 @@ import java.util.Date;
 
 public interface ReservasRepository extends JpaRepository<ReservasEntity, Long> {
 
-    //boolean existByFechaReservaAndVehiculo_Id(Date fechaReserva, Long id);
+    boolean existsByFechaReservaAndVehiculo_Id(Date fechaReserva, Long id);
 }
