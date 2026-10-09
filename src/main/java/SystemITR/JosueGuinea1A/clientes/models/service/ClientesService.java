@@ -29,6 +29,7 @@ public class ClientesService {
 
     private ClientesDTO convertirADTO(ClientesEntity entity){
         ClientesDTO dto = new ClientesDTO();
+        dto.setId(entity.getId());
         dto.setNombre(entity.getNombre());
         dto.setApellido(entity.getApellido());
         dto.setTelefono(entity.getTelefono());

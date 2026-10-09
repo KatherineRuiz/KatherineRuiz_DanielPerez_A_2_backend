@@ -26,7 +26,7 @@ public class ReservasEntity {
     private Date fechaReserva;
     @Column(name = "cantidad_pasajeros", nullable = false)
     private int cantidadPasajeros;
-    @Column(name = "cantidad_dias", nullable = false, unique = true)
+    @Column(name = "cantidad_dias", nullable = false)
     private int cantidadDias;
     @Column(name = "estado")
     private String estado;

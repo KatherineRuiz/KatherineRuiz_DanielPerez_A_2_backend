@@ -22,7 +22,7 @@ public class VehiculosEntity {
     private String modelo;
     @Column(name = "capacidad", nullable = false)
     private int capacidad;
-    @Column(name = "precio_dia", nullable = false, unique = true)
+    @Column(name = "precio_dia", nullable = false)
     private double precioDia;
     @Column(name = "placa")
     private String placa;

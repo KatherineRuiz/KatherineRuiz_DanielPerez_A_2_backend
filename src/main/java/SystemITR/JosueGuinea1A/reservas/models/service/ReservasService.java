@@ -52,6 +52,7 @@ public class ReservasService {
 
     private ReservasDTO convertirADTO(ReservasEntity entity){
         ReservasDTO dto = new ReservasDTO();
+        dto.setId(entity.getId());
         dto.setNombreReserva(entity.getNombreReserva());
         dto.setFechaReserva(entity.getFechaReserva());
         dto.setCantidadPasajeros(entity.getCantidadPasajeros());
@@ -113,11 +114,14 @@ public class ReservasService {
         if (dto.getCantidadPasajeros() > vehiculo.get().getCapacidad()) {
             throw new RuntimeException("La cantidad de pasajeros es mayor a la capacidad del vehículo");
         }
-        if (repo.existsByFechaReservaAndVehiculo_Id(dto.getFechaReserva(), dto.getIdVehiculo())){
-            throw new RuntimeException("Ya existe una reserva para este vehículo en esta fecha.");
-        }
         Optional<ReservasEntity> registroExistente = repo.findById(id);
+
         if (registroExistente.isPresent()){
+            if (registroExistente.get().getFechaReserva() != dto.getFechaReserva() || registroExistente.get().getVehiculo().getId() != dto.getIdVehiculo()){
+                if (repo.existsByFechaReservaAndVehiculo_Id(dto.getFechaReserva(), dto.getIdVehiculo())){
+                    throw new RuntimeException("Ya existe una reserva para este vehículo en esta fecha.");
+                }
+            }
             ReservasEntity entity = registroExistente.get();
             dto.setNombreReserva(entity.getNombreReserva());
             dto.setFechaReserva(entity.getFechaReserva());

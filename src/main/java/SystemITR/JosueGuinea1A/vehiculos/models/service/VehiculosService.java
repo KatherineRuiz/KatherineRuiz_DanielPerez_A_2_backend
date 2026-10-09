@@ -18,6 +18,7 @@ public class VehiculosService {
 
     private VehiculosDTO convertirADTO(VehiculosEntity entity){
         VehiculosDTO dto = new VehiculosDTO();
+        dto.setId(entity.getId());
         dto.setMarca(entity.getMarca());
         dto.setModelo(entity.getModelo());
         dto.setCapacidad(entity.getCapacidad());

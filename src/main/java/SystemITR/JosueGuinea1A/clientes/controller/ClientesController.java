@@ -24,7 +24,7 @@ public class ClientesController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ClientesDTO>> nuevoCliente(@Valid ClientesDTO json){
+    public ResponseEntity<ApiResponse<ClientesDTO>> nuevoCliente(@Valid @RequestBody ClientesDTO json){
         try {
             ClientesDTO dto = service.nuevoCliente(json);
             log.info("Nuevo cliente registrado.");

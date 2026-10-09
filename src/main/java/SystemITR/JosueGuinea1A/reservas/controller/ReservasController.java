@@ -24,7 +24,7 @@ public class ReservasController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ReservasDTO>> nuevReserva(@Valid ReservasDTO json){
+    public ResponseEntity<ApiResponse<ReservasDTO>> nuevReserva(@Valid @RequestBody ReservasDTO json){
         try {
             ReservasDTO dto = service.nuevaReserva(json);
             log.info("Nuevo cliente registrado.");
