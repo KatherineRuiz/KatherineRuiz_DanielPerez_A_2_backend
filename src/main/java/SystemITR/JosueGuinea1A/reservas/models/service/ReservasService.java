@@ -106,33 +106,42 @@ public class ReservasService {
         return false;
     }
 
-    public ReservasDTO actualizar(@Valid ReservasDTO dto, Long id){
-        if (dto.getEstado() != "CONFIRMADA" && dto.getEstado() != "PENDIENTE" && dto.getEstado() != "CANCELADA" && dto.getEstado() != "FINALIZADA"){
-            new RuntimeException("El estado de la reserva es inválido");
+    public ReservasDTO actualizar(ReservasDTO dto, Long id){
+        if (!List.of("CONFIRMADA", "PENDIENTE", "CANCELADA", "FINALIZADA").contains(dto.getEstado())) {
+            throw new RuntimeException("El estado de la reserva es inválido");
         }
-        Optional<VehiculosEntity> vehiculo = vehiculosRepo.findById(dto.getIdVehiculo());
-        if (dto.getCantidadPasajeros() > vehiculo.get().getCapacidad()) {
+
+        Optional<ReservasEntity> existente = repo.findById(id);
+        if (existente.isEmpty()) {
+            return null;
+        }
+        ReservasEntity entity = existente.get();
+
+        VehiculosEntity vehiculo = vehiculosRepo.findById(dto.getIdVehiculo())
+                .orElseThrow(() -> new RuntimeException("El vehículo no fue encontrado."));
+        ClientesEntity cliente = clientesRepo.findById(dto.getIdCliente())
+                .orElseThrow(() -> new RuntimeException("El cliente no fue encontrado."));
+
+        if (dto.getCantidadPasajeros() > vehiculo.getCapacidad()) {
             throw new RuntimeException("La cantidad de pasajeros es mayor a la capacidad del vehículo");
         }
-        Optional<ReservasEntity> registroExistente = repo.findById(id);
 
-        if (registroExistente.isPresent()){
-            if (registroExistente.get().getFechaReserva() != dto.getFechaReserva() || registroExistente.get().getVehiculo().getId() != dto.getIdVehiculo()){
-                if (repo.existsByFechaReservaAndVehiculo_Id(dto.getFechaReserva(), dto.getIdVehiculo())){
-                    throw new RuntimeException("Ya existe una reserva para este vehículo en esta fecha.");
-                }
-            }
-            ReservasEntity entity = registroExistente.get();
-            dto.setNombreReserva(entity.getNombreReserva());
-            dto.setFechaReserva(entity.getFechaReserva());
-            dto.setCantidadPasajeros(entity.getCantidadPasajeros());
-            dto.setCantidadDias(entity.getCantidadDias());
-            dto.setEstado(entity.getEstado());
-            dto.setTotalPago(entity.getTotalPago());
-            dto.setIdCliente(entity.getCliente().getId());
-            ReservasEntity datosGuardados = repo.save(entity);
-            return convertirADTO(datosGuardados);
+        boolean cambioFecha = entity.getFechaReserva().getTime() != dto.getFechaReserva().getTime();
+        boolean cambioVehiculo = !entity.getVehiculo().getId().equals(dto.getIdVehiculo());
+        if ((cambioFecha || cambioVehiculo)
+                && repo.existsByFechaReservaAndVehiculo_Id(dto.getFechaReserva(), dto.getIdVehiculo())) {
+            throw new RuntimeException("Ya existe una reserva para este vehículo en esta fecha.");
         }
-        return null;
+
+        entity.setNombreReserva(dto.getNombreReserva());
+        entity.setFechaReserva(dto.getFechaReserva());
+        entity.setCantidadPasajeros(dto.getCantidadPasajeros());
+        entity.setCantidadDias(dto.getCantidadDias());
+        entity.setEstado(dto.getEstado());
+        entity.setCliente(cliente);
+        entity.setVehiculo(vehiculo);
+        entity.setTotalPago(dto.getCantidadDias() * vehiculo.getPrecioDia());
+
+        return convertirADTO(repo.save(entity));
     }
 }
