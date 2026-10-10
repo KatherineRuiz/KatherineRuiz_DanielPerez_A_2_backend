@@ -33,7 +33,7 @@ public class ClientesController {
         }catch (Exception e){
             e.printStackTrace();
             log.error("Error al registrar al cliente: " + e.getMessage());
-            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false, "Error al registrar al cliente:" + e.getMessage());
+            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false, "Error al registrar al cliente");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
         }
     }
@@ -63,7 +63,7 @@ public class ClientesController {
         }catch (Exception e){
             e.printStackTrace();
             log.error("Error al obtener los datos del cliente con ID: " + id + ". "+ e.getMessage());
-            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false, "Error al obtener los datos del cliente con ID: " + id + ". " + e.getMessage());
+            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false, "Error al obtener los datos del cliente");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
         }
     }
@@ -74,7 +74,7 @@ public class ClientesController {
             boolean respuesta = service.eliminarCliente(id);
             if (respuesta){
                 log.info("El cliente con ID: " +id+ ", ha sido eliminado.");
-                ApiResponse<Void> respuestExitosa = new ApiResponse<>(true, "El cliente con ID: " +id+ ", ha sido eliminado.");
+                ApiResponse<Void> respuestExitosa = new ApiResponse<>(true, "El cliente ha sido eliminado.");
                 return ResponseEntity.status(HttpStatus.NO_CONTENT).body(respuestExitosa);
             }
             ApiResponse<Void> noEncontrado = new ApiResponse<>(false, "El cliente con ID: " +id+ ", no se encontró.");
@@ -82,7 +82,7 @@ public class ClientesController {
         }catch (Exception e){
             e.printStackTrace();
             log.error("Error al eliminar los datos del cliente con ID: " + id + ". "+ e.getMessage());
-            ApiResponse<Void> respuestaError = new ApiResponse<>(false, "Error al eliminar los datos del cliente con ID: " + id + ". " + e.getMessage());
+            ApiResponse<Void> respuestaError = new ApiResponse<>(false, "Error al eliminar los datos del cliente");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
         }
     }
@@ -93,7 +93,7 @@ public class ClientesController {
             ClientesDTO data = service.actualizar(dto,id);
             if (data != null){
                 log.info("El cliente con ID: " + id + ", fue actualizado.");
-                ApiResponse<ClientesDTO> resuestaExito = new ApiResponse<>(true, "El cliente con ID: " + id + ", fue actualizado.", data);
+                ApiResponse<ClientesDTO> resuestaExito = new ApiResponse<>(true, "El cliente fue actualizado.", data);
                 return ResponseEntity.ok(resuestaExito);
             }
             ApiResponse<ClientesDTO> respuestaFallida = new ApiResponse<>(false, "Proceso no completado, no se encontró al cliente");
@@ -101,7 +101,7 @@ public class ClientesController {
         }catch (Exception e){
             e.printStackTrace();
             log.error("Error al editar los datos del cliente con ID: " + id + ". "+ e.getMessage());
-            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false, "Error al editar los datos del cliente con ID: " + id + ". " + e.getMessage());
+            ApiResponse<ClientesDTO> respuestaError = new ApiResponse<>(false, "Error al editar los datos del cliente");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(respuestaError);
         }
     }
